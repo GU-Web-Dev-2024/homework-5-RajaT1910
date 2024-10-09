@@ -1,3 +1,7 @@
+// Name: Raja Tsegaye Sori
+// Class: CPSC 332
+// Assignment: Homework 5
+// Last Modified: October 9, 2024
 
 // List of additional artworks to add dynamically
 const newArtworks = [
@@ -14,43 +18,53 @@ const newArtworks = [
 ];
 // Add your JavaScript code here.
 
-const art_gallery = document.getElementById('art-grid');
+const artGallery = document.getElementById('art-grid');
 const counter = document.getElementById('counter');
-const reset_button = document.getElementById('reset-button');
-const add_art = document.getElementById('add-art-button');
-let counter_var = 0; // counter varibale
-const art_panels = document.querySelectorAll('.art-panel');
+const resetButton = document.getElementById('reset-button');
+const addArt = document.getElementById('add-art-button');
+let counterVar = 0; // counter varibale
+let artPanels = document.querySelectorAll('.art-panel');
+
+let removeMode = false;
+const removeArtButton = document.getElementById('remove-art-button');
 
 // Add click event to each panel
-art_panels.forEach(panel => {
+function panelClick(panel) {
     panel.addEventListener('click', function() {
-        // Only update if the panel hasn't been clicked before
-        if (!this.classList.contains('viewed')) {
+        artPanels = document.querySelectorAll('.art-panel'); // Update the list of panels
+
+        // Check if we're in removal mode
+        if (removeMode) {
+            this.remove(); // Remove the panel if in remove mode
+        }
+        // Otherwise, handle "viewed" behavior
+        else if (!this.classList.contains('viewed')) {
             this.classList.add('viewed');
-            counter_var++;
-            // this.classList.style.backgroundColor = "purple";
-            counter.textContent = `Artworks Viewed: ${counter_var}`;
+            counterVar++;
+            counter.textContent = `Artworks Viewed: ${counterVar}`;
         }
     });
-});
+}
+
+artPanels.forEach(panelClick);
 
 // reset button
-reset_button.addEventListener('click', () => {
+resetButton.addEventListener('click', () => {
     // Reset counter
-    counter_var = 0;
-    counter.textContent = `Artworks Viewed: ${counter_var}`;
+    counterVar = 0;
+    counter.textContent = `Artworks Viewed: ${counterVar}`;
     
     // Reset all art panels to their original state
-    const all_panels = document.querySelectorAll('.art-panel'); // reinitilazing since the first one only saves the first 3
-    all_panels.forEach(panel => {
+    const allPanels = document.querySelectorAll('.art-panel'); // reinitilazing since the first one only saves the first 3
+    allPanels.forEach(panel => {
         panel.classList.remove('viewed');
     });
 });
 
 // add art button
-let art_index = 0;
-add_art.addEventListener('click', () => {
-    if (art_index < newArtworks.length) {
+let artIndex = 0;
+addArt.addEventListener('click', () => {
+    if (artIndex < newArtworks.length) {
         // Create a new art panel
         const randomArt = newArtworks[Math.floor(Math.random() * newArtworks.length)]; // getting a random index from newArtworks
         const newPanel = document.createElement('div');
@@ -64,16 +78,24 @@ add_art.addEventListener('click', () => {
         document.querySelector('.art-grid').appendChild(newPanel);
 
         // Add click event to the new panel 
-        newPanel.addEventListener('click', function() {
-            if (!this.classList.contains('viewed')) {
-                this.classList.add('viewed');
-                counter_var++;
-                counter.textContent = `Artworks Viewed: ${counter_var}`;
-            }
-        });  
+        panelClick(newPanel);
 
         // Increment to the next artwork
-        art_index++;
+        artIndex++;
     }
 });
+
+// remove mode
+removeArtButton.addEventListener('click', () => {
+    const removeArtButton = document.getElementById('remove-art-button');
+    removeMode = !removeMode;
+    if (removeMode) {
+        removeArtButton.textContent = 'Click to Remove Artworks';
+        removeArtButton.style.backgroundColor = '#ff5555'; // Indicate active remove mode
+    } else {
+        removeArtButton.textContent = '(Bonus) Remove Artwork';
+        removeArtButton.style.backgroundColor = '#333';
+    }
+});
+
 
