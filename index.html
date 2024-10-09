@@ -148,14 +148,16 @@
             { title: 'Starry Night Over the Rhône', artist: 'Vincent van Gogh', img: 'https://via.placeholder.com/200' }
         ];
         // Add your JavaScript code here.
+
+        const art_gallery = document.getElementById('art-grid');
         const counter = document.getElementById('counter');
-        const resetButton = document.getElementById('reset-button');
-        const addArtButton = document.getElementById('add-art-button');
+        const reset_button = document.getElementById('reset-button');
+        const add_art = document.getElementById('add-art-button');
         let counter_var = 0; // counter varibale
-        const artPanels = document.querySelectorAll('.art-panel');
+        const art_panels = document.querySelectorAll('.art-panel');
 
         // Add click event to each panel
-        artPanels.forEach(panel => {
+        art_panels.forEach(panel => {
             panel.addEventListener('click', function() {
                 // Only update if the panel hasn't been clicked before
                 if (!this.classList.contains('viewed')) {
@@ -168,20 +170,46 @@
         });
 
         // reset button
-        resetButton.addEventListener('click', () => {
+        reset_button.addEventListener('click', () => {
             // Reset counter
             counter_var = 0;
             counter.textContent = `Artworks Viewed: ${counter_var}`;
             
             // Reset all art panels to their original state
-            artPanels.forEach(panel => {
+            const all_panels = document.querySelectorAll('.art-panel'); // reinitilazing since the first one only saves the first 3
+            all_panels.forEach(panel => {
                 panel.classList.remove('viewed');
             });
         });
 
         // add art button
-        addArtButton.addEventListener('click', function(){
+        let art_index = 0;
+        add_art.addEventListener('click', () => {
+            if (art_index < newArtworks.length) {
+                // Create a new art panel
+                const randomArt = newArtworks[Math.floor(Math.random() * newArtworks.length)]; // getting a random index from newArtworks
+                const newPanel = document.createElement('div');
+                newPanel.classList.add('art-panel');
+                newPanel.innerHTML = `
+                    <img src="${randomArt.img}" alt="${randomArt.title}">
+                    <p>${randomArt.title} by ${randomArt.artist}</p>
+                `;
 
+                // Append new panel to the grid
+                document.querySelector('.art-grid').appendChild(newPanel);
+
+                // Add click event to the new panel
+                newPanel.addEventListener('click', function() {
+                    if (!this.classList.contains('viewed')) {
+                        this.classList.add('viewed');
+                        counter_var++;
+                        counter.textContent = `Artworks Viewed: ${counter_var}`;
+                    }
+                });  
+
+                // Increment to the next artwork
+                art_index++;
+            }
         });
 
         // Later, move this to an external JavaScript file for better organization.
