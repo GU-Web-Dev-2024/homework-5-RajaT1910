@@ -90,6 +90,12 @@
         button:hover {
             background-color: #555;
         }
+
+        /* changing color when viewd */
+        .art-panel.viewed {
+            background-color: #d3ffd3; /* Light green to indicate viewed */
+        }
+
     </style>
 </head>
 
@@ -127,6 +133,7 @@
 
     <!-- Placeholder for JavaScript Code -->
     <script>
+
         // List of additional artworks to add dynamically
         const newArtworks = [
             { title: 'The Scream', artist: 'Edvard Munch', img: 'https://via.placeholder.com/200' },
@@ -141,6 +148,42 @@
             { title: 'Starry Night Over the Rhône', artist: 'Vincent van Gogh', img: 'https://via.placeholder.com/200' }
         ];
         // Add your JavaScript code here.
+        const counter = document.getElementById('counter');
+        const resetButton = document.getElementById('reset-button');
+        const addArtButton = document.getElementById('add-art-button');
+        let counter_var = 0; // counter varibale
+        const artPanels = document.querySelectorAll('.art-panel');
+
+        // Add click event to each panel
+        artPanels.forEach(panel => {
+            panel.addEventListener('click', function() {
+                // Only update if the panel hasn't been clicked before
+                if (!this.classList.contains('viewed')) {
+                    this.classList.add('viewed');
+                    counter_var++;
+                    // this.classList.style.backgroundColor = "purple";
+                    counter.textContent = `Artworks Viewed: ${counter_var}`;
+                }
+            });
+        });
+
+        // reset button
+        resetButton.addEventListener('click', () => {
+            // Reset counter
+            counter_var = 0;
+            counter.textContent = `Artworks Viewed: ${counter_var}`;
+            
+            // Reset all art panels to their original state
+            artPanels.forEach(panel => {
+                panel.classList.remove('viewed');
+            });
+        });
+
+        // add art button
+        addArtButton.addEventListener('click', function(){
+
+        });
+
         // Later, move this to an external JavaScript file for better organization.
     </script>
 </body>
